@@ -1,11 +1,14 @@
 package com.example.placegiver;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,10 +16,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class PerfilUsuarioActivity extends AppCompatActivity {
 
     Toolbar tb;
+    RecyclerView rv;
+    RecyclerView.LayoutManager miLayoutManager;
+    ActivityResultLauncher<Intent> launcherPost;
+    AdaptadorPosts adaptadorPosts;
+    EditText edtEscribirPost;
 
 
     @Override
@@ -34,6 +45,12 @@ public class PerfilUsuarioActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         tb.setTitle("");
+        rv = findViewById(R.id.rvPostsUsuario);
+        miLayoutManager = new GridLayoutManager(this, 1);
+        adaptadorPosts = new AdaptadorPosts();
+        rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+        rv.setAdapter(adaptadorPosts);
+        edtEscribirPost = findViewById(R.id.edtEscrbirPost);
     }
 
     @Override

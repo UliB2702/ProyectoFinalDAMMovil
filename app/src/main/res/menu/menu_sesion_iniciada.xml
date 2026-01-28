@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+    >
+
+
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/btn_menu_inicio"
+            android:icon="@drawable/home_icon"
+            android:title="Inicio"
+            />
+        <item
+            android:id="@+id/btn_menu_cuenta"
+            android:icon="@drawable/account_icon"
+            android:title="Mi cuenta"
+            />
+        <item
+            android:id="@+id/btn_menu_mensajes"
+            android:icon="@drawable/mensages_icon"
+            android:title="Mis mensajes"
+            />
+    </group>
+
+    <item
+        android:title="">
+        <menu>
+         <item
+            android:id="@+id/btn_menu_cerrarSesion"
+            android:icon="@drawable/logout_icon"
+            android:title="Cerrar sesión"
+            />
+        </menu>
+    </item>
+
+
+</menu>

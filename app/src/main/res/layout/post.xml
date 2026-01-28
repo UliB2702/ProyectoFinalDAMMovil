@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imgFotoUsuario"
         android:layout_width="58dp"
         android:layout_height="58dp"
         android:layout_marginStart="16dp"
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/imagenRedondeada"
-        app:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/txtUserName"
@@ -23,12 +23,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="136dp"
-        android:text="TextView"
+        android:text="Textview"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.066"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/imgFotoUsuario"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -36,11 +35,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingLeft="40dp"
+        android:paddingTop="5dp"
         android:paddingRight="40dp"
         android:text="fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imgFotoUsuario" />
 
     <Button
         android:id="@+id/btnLikes"
@@ -53,7 +53,7 @@
         app:icon="@drawable/heart"
         app:iconTint="#000000"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtMensaje" />
+        app:layout_constraintTop_toBottomOf="@+id/imgAdjunto" />
 
     <Button
         android:id="@+id/btnComentarios"
@@ -66,5 +66,15 @@
         app:iconTint="#020000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnLikes"
-        app:layout_constraintTop_toBottomOf="@+id/txtMensaje" />
+        app:layout_constraintTop_toBottomOf="@+id/imgAdjunto" />
+
+    <ImageView
+        android:id="@+id/imgAdjunto"
+        android:layout_width="0dp"
+        android:layout_height="252dp"
+        android:paddingTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtMensaje"
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
