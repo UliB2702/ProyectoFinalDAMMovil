@@ -10,12 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHolder>{
 
     int selectedPos = RecyclerView.NO_POSITION;
-
-    public AdaptadorPosts(){
-
+    ArrayList<Post> posts = new ArrayList<Post>();
+    public AdaptadorPosts(ArrayList<Post> posts){
+        this.posts = posts;
     }
 
     public int getSelectedPos(){
@@ -78,6 +80,7 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
 
                 }
             });
+
             txtNombreUsuario.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

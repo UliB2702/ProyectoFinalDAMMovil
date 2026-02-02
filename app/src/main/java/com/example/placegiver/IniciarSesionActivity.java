@@ -33,7 +33,7 @@ public class IniciarSesionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_iniciar_sesion);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.inicio_sesion), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -52,15 +52,16 @@ public class IniciarSesionActivity extends AppCompatActivity {
         btnInicioSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etEmail.getText().toString().equals("alumno@gmail.com") && etPassword.getText().toString().equals("123")){
+                Usuario u = (new APIRest()).obtenerDatosUsuario(etEmail.getText().toString(), etPassword.getText().toString());
+                if (u != null){
                     Intent intent = new Intent();
-                    intent.putExtra("Email", etEmail.getText());
-                    intent.putExtra("password", etPassword.getText());
+                    intent.putExtra(u);
                     setResult(RESULT_OK, intent);
                     finish();
                 }
                 else{
                     tvError.setText("Algunos de los datos es incorrecto. Ingresalos nuevamente");
+
                 }
             }
         });
