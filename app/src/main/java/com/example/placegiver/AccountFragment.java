@@ -67,7 +67,7 @@ public class AccountFragment extends Fragment {
         miLayoutManager = new GridLayoutManager(requireContext(), 1);
         rv.setLayoutManager(miLayoutManager);
 
-        adaptadorPosts = new AdaptadorPosts((new APIRest().obtenerPostsDeUsuario());
+        //adaptadorPosts = new AdaptadorPosts((new APIRest().obtenerPostsDeUsuario());
         rv.addItemDecoration(
                 new DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL)
         );

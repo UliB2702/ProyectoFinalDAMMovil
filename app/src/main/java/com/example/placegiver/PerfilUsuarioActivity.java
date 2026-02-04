@@ -47,7 +47,7 @@ public class PerfilUsuarioActivity extends AppCompatActivity {
         tb.setTitle("");
         rv = findViewById(R.id.rvPostsUsuario);
         miLayoutManager = new GridLayoutManager(this, 1);
-        adaptadorPosts = new AdaptadorPosts();
+        //adaptadorPosts = new AdaptadorPosts();
         rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
         rv.setAdapter(adaptadorPosts);
         edtEscribirPost = findViewById(R.id.edtEscrbirPost);

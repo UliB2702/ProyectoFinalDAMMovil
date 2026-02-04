@@ -2,6 +2,7 @@ package com.example.placegiver;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -24,8 +26,9 @@ public class IniciarSesionActivity extends AppCompatActivity {
     Toolbar tb;
     TextView tvError;
     Button btnInicioSesion, btnRegistro;
-    EditText etEmail, etPassword;
+    EditText etNombre, etPassword;
 
+    APIRest api = new APIRest();
 
 
     @Override
@@ -46,23 +49,26 @@ public class IniciarSesionActivity extends AppCompatActivity {
         tvError = findViewById(R.id.tvError);
         btnInicioSesion = findViewById(R.id.btnInicioSesion);
         btnRegistro = findViewById(R.id.btnRegistro);
-        etEmail = findViewById(R.id.txtEmail);
+        etNombre = findViewById(R.id.txtNombre);
         etPassword = findViewById(R.id.txtPassword);
 
         btnInicioSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Usuario u = (new APIRest()).obtenerDatosUsuario(etEmail.getText().toString(), etPassword.getText().toString());
-                if (u != null){
-                    Intent intent = new Intent();
-                    intent.putExtra(u);
-                    setResult(RESULT_OK, intent);
-                    finish();
+                if(!etNombre.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty()){
+                    api.obtenerDatosUsuario(etNombre.getText().toString(), etPassword.getText().toString(),(success,usuario)-> {
+                    if (success) {
+                        Intent intent = new Intent(IniciarSesionActivity.this, MainActivity.class);
+                        intent.putExtra("usuario",usuario);
+                        startActivity(intent);
+                    }
+                });
+                    tvError.setText("Algunos de los datos es incorrecto. Ingresalos nuevamente");
                 }
                 else{
-                    tvError.setText("Algunos de los datos es incorrecto. Ingresalos nuevamente");
-
+                    tvError.setText("Completa los campos para poder seguir");
                 }
+
             }
         });
 

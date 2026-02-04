@@ -7,14 +7,14 @@ public class Post implements Serializable {
     private int id;
     private String texto;
     private String fechaPublicacion;
-    private int idUsuario;
+    private String usuario;
     private int idCategoria;
 
-    public Post(int id, String texto, String fechaPublicacion, int idUsuario, int idCategoria) {
+    public Post(int id, String texto, String fechaPublicacion, String usuario, int idCategoria) {
         this.id = id;
         this.texto = texto;
         this.fechaPublicacion = fechaPublicacion;
-        this.idUsuario = idUsuario;
+        this.usuario = usuario;
         this.idCategoria = idCategoria;
     }
 
@@ -42,12 +42,13 @@ public class Post implements Serializable {
         this.fechaPublicacion = fechaPublicacion;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public String getUsuario() {
+        return usuario;
+
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(String idUsuario) {
+        this.usuario = idUsuario;
     }
 
     public int getIdCategoria() {

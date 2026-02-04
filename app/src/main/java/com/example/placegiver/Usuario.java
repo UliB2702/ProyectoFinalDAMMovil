@@ -5,15 +5,13 @@ import java.sql.Date;
 
 //TODO Cambiar la base de datos para que el nombre sea la clave primaria
 public class Usuario implements Serializable {
-    private int id;
     private String nombre;
     private String descripcion;
     private String email;
     private String password;
     private String fechaCreacion;
 
-    public Usuario(int id, String nombre, String descripcion, String email, String password, String fechaCreacion) {
-        this.id = id;
+    public Usuario(String nombre, String descripcion, String email, String password, String fechaCreacion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.email = email;
@@ -62,11 +60,4 @@ public class Usuario implements Serializable {
         this.nombre = nombre;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }

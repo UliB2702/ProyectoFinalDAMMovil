@@ -11,3 +11,7 @@ Estuve implementando menus del estilo DrawerLayouts. Aunque les falten funcional
 ## 2 de Febrero
 
 Avanzando con la conexion con el backend. Estoy empezando a pensar en cambiar que la clave primaria de usuario sea el nombre en lugar de un id
+
+## 4 de Febrero
+
+Al avanzar junto con la API, pude realizar un inicio de sesion funcional, en el cual, llame a la api y compruebe que los datos de un usuario existan

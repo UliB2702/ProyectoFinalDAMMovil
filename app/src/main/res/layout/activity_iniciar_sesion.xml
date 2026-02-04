@@ -23,7 +23,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
@@ -37,12 +37,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/txtEmail"
+        android:id="@+id/txtNombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Email"
+        android:hint="Nombre"
         android:inputType="text"
         android:textColorHint="#565555"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,16 +73,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.297"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtNombre" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Email"
+        android:layout_marginTop="28dp"
+        android:text="Nombre"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.268"
+        app:layout_constraintHorizontal_bias="0.28"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -131,7 +131,7 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="#FD0808"
         android:textColor="#FF0000"
-        app:layout_constraintEnd_toEndOf="@+id/layoutContenedor"
+        app:layout_constraintEnd_toEndOf="@id/layoutContenedor"
         app:layout_constraintStart_toStartOf="@+id/layoutContenedor"
         app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 

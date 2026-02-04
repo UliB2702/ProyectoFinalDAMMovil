@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rv = view.findViewById(R.id.rvFeed);
         miLayoutManager = new GridLayoutManager(requireContext(), 1);
-        adaptador = new AdaptadorPosts();
+        adaptador = new AdaptadorPosts((new APIRest()).obtenerPostsMasRecientes());
         rv.setLayoutManager(miLayoutManager);
         rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL));
         rv.setAdapter(adaptador);

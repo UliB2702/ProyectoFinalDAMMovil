@@ -36,10 +36,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ActivityResultLauncher<Intent> launcher, launcher2;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent i = getIntent();
+        Usuario u;
 
 
         tb = findViewById(R.id.toolbar_main);
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer = findViewById(R.id.main);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        if(i.getExtras() != null){
+
+        }
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBar ab = getSupportActionBar();
