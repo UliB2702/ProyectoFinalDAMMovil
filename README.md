@@ -15,3 +15,7 @@ Avanzando con la conexion con el backend. Estoy empezando a pensar en cambiar qu
 ## 4 de Febrero
 
 Al avanzar junto con la API, pude realizar un inicio de sesion funcional, en el cual, llame a la api y compruebe que los datos de un usuario existan
+
+## 5 de Febrero
+
+Junto a lo de ayer, ahora pude cambiar el menu DrawerLayout para que muestre el menu de sesion iniciada junto con los datos en el header del menu
