@@ -19,6 +19,7 @@ public class HomeFragment extends Fragment {
     RecyclerView rv;
     RecyclerView.LayoutManager miLayoutManager;
     AdaptadorPosts adaptador;
+    APIRest api = new APIRest();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,7 +33,11 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rv = view.findViewById(R.id.rvFeed);
         miLayoutManager = new GridLayoutManager(requireContext(), 1);
-        adaptador = new AdaptadorPosts((new APIRest()).obtenerPostsMasRecientes());
+        api.obtenerPostsMasRecientes((success, posts)->{
+            if(success){
+                adaptador = new AdaptadorPosts(posts);
+            }
+        });
         rv.setLayoutManager(miLayoutManager);
         rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL));
         rv.setAdapter(adaptador);

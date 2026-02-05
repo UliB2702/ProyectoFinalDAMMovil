@@ -16,6 +16,11 @@ public class APIRest {
 
     public interface LoginCallback {
         void onLoginResult(boolean success, Usuario u);
+
+    }
+
+    public interface PostsCallback {
+        void onPostsResult(boolean success, ArrayList<Post> posts);
     }
     //API de Usuarios
     public void obtenerDatosUsuario(String nombre, LoginCallback callback) {
@@ -107,95 +112,108 @@ public class APIRest {
 
     // API de Publicaciones
 
-    public  ArrayList<Post> obtenerPostsMasRecientes(){
+    public void obtenerPostsMasRecientes(PostsCallback callback){
         ArrayList<Post> posts = new ArrayList<>();
-        try {
-            URL url = new URL(
-                    "http://10.0.2.2:8080/placegiver/rest/posts");
+        new Thread(()-> {
+            try {
+                URL url = new URL(
+                        "http://10.0.2.2:8080/placegiver/rest/posts");
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Accept", "application/json");
 
-            int code = conn.getResponseCode();
-            System.out.println("Código HTTP: " + code);
+                int code = conn.getResponseCode();
+                System.out.println("Código HTTP: " + code);
 
 
 
-            if (code == 200) {
-                InputStream stream = conn.getInputStream();
+                if (code == 200) {
+                    InputStream stream = conn.getInputStream();
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8) );
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8) );
 
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null)
-                { response.append(line.trim());
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                    { response.append(line.trim());
+                    }
+                    JSONArray array = new JSONArray(response.toString());
+
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject obj = array.getJSONObject(i);
+
+                        int id = obj.getInt("id");
+                        String texto = obj.getString("texto");
+                        String fechaPublicacion = obj.getString("fechaPublicacion");
+                        String nombre = obj.getString("usuario");
+                        int idCategoria = obj.getInt("idCategoria");
+
+                        posts.add(new Post(id,texto,fechaPublicacion , nombre, idCategoria));
+                    }
+                    callback.onPostsResult(true, posts);
                 }
-                JSONArray array = new JSONArray(response.toString());
-
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-
-                    int id = obj.getInt("id");
-                    String texto = obj.getString("texto");
-                    String fechaPublicacion = obj.getString("fechaPublicacion");
-                    String nombre = obj.getString("usuario");
-                    int idCategoria = obj.getInt("idCategoria");
-
-                    posts.add(new Post(id,texto,fechaPublicacion , nombre, idCategoria));
+                else{
+                    callback.onPostsResult(false, null);
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                callback.onPostsResult(false, null);
             }
+        }).start();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return posts;
     }
 
-    public ArrayList<Post> obtenerPostsDeUsuario(String nombre){
+    public void obtenerPostsDeUsuario(String nombre, PostsCallback callback){
         ArrayList<Post> posts = new ArrayList<>();
-        try {
-            URL url = new URL(
-                    "http://10.0.2.2:8080/placegiver/rest/posts?nombre=" + nombre);
+        new Thread(()-> {
+            try {
+                URL url = new URL(
+                        "http://10.0.2.2:8080/placegiver/rest/posts?nombre=" + nombre);
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Accept", "application/json");
 
-            int code = conn.getResponseCode();
-            System.out.println("Código HTTP: " + code);
+                int code = conn.getResponseCode();
+                System.out.println("Código HTTP: " + code);
 
 
 
-            if (code == 200) {
-                InputStream stream = conn.getInputStream();
+                if (code == 200) {
+                    InputStream stream = conn.getInputStream();
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8) );
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8) );
 
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null)
-                { response.append(line.trim());
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null)
+                    { response.append(line.trim());
+                    }
+                    JSONArray array = new JSONArray(response.toString());
+
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject obj = array.getJSONObject(i);
+
+                        int id = obj.getInt("id");
+                        String texto = obj.getString("texto");
+                        String fechaPublicacion = obj.getString("fechaPublicacion");
+                        int idCategoria = obj.getInt("idCategoria");
+
+                        posts.add(new Post(id,texto,fechaPublicacion , nombre, idCategoria));
+                    }
+                    callback.onPostsResult(true, posts);
                 }
-                JSONArray array = new JSONArray(response.toString());
-
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-
-                    int id = obj.getInt("id");
-                    String texto = obj.getString("texto");
-                    String fechaPublicacion = obj.getString("fechaPublicacion");
-                    int idCategoria = obj.getInt("idCategoria");
-
-                    posts.add(new Post(id,texto,fechaPublicacion , nombre, idCategoria));
+                else{
+                    callback.onPostsResult(false, null);
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                callback.onPostsResult(false, null);
             }
+        }).start();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return posts;
     }
 }

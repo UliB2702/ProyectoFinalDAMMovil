@@ -1,12 +1,17 @@
 package com.example.placegiver;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -32,28 +37,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toogle;
     Toolbar tb;
-
+    private SharedPreferences prefs;
+    private NavigationView navigationView;
     ActivityResultLauncher<Intent> launcher, launcher2;
-
-
+    Intent i;
+    Usuario u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent i = getIntent();
-        Usuario u;
+        i = getIntent();
+
 
 
         tb = findViewById(R.id.toolbar_main);
         setSupportActionBar(tb);
 
         drawer = findViewById(R.id.main);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        if(i.getExtras() != null){
-
-        }
+        navigationView = findViewById(R.id.nav_view);
+        prefs = getSharedPreferences("sesion", MODE_PRIVATE);
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBar ab = getSupportActionBar();
@@ -66,8 +70,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (navigationView == null) return;
+
+        boolean sesionIniciada = prefs.getBoolean("login", false);
+        Log.d("MAIN", "Sesion iniciada: " + sesionIniciada);
+
+        navigationView.getMenu().clear();
+
+        if (sesionIniciada && prefs.contains("nombre") && prefs.contains("email")) {
+            View header = navigationView.getHeaderView(0);
+            TextView tvNombre = header.findViewById(R.id.nav_header_tvnombre);
+            TextView tvCorreo = header.findViewById(R.id.nav_header_tvemail);
 
 
+            navigationView.inflateMenu(R.menu.menu_sesion_iniciada);
+            u = (Usuario) (i.getSerializableExtra("usuario"));
+
+            tvNombre.setText(prefs.getString("nombre", "Usuario"));
+            tvCorreo.setText(prefs.getString("email", ""));
+
+            Datos.setU(u);
+        } else {
+            navigationView.inflateMenu(R.menu.menu_sin_sesion);
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -77,6 +107,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.btn_crear) {
             Intent i = new Intent(MainActivity.this, RegistroActivity.class);
             startActivity(i);
+        }
+        else if(item.getItemId() == R.id.btn_menu_cerrarSesion){
+            Toast.makeText(getApplicationContext(), "Sesión cerrada",
+                    Toast.LENGTH_LONG);
+            prefs.edit().clear().apply();
+            recreate();
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

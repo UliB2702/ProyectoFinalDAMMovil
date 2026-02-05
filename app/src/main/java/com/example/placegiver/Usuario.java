@@ -3,7 +3,6 @@ package com.example.placegiver;
 import java.io.Serializable;
 import java.sql.Date;
 
-//TODO Cambiar la base de datos para que el nombre sea la clave primaria
 public class Usuario implements Serializable {
     private String nombre;
     private String descripcion;

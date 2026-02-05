@@ -58,9 +58,16 @@ public class IniciarSesionActivity extends AppCompatActivity {
                 if(!etNombre.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty()){
                     api.obtenerDatosUsuario(etNombre.getText().toString(), etPassword.getText().toString(),(success,usuario)-> {
                     if (success) {
+                        getSharedPreferences("sesion", MODE_PRIVATE)
+                                .edit()
+                                .putBoolean("login", true)
+                                .putString("nombre", usuario.getNombre())
+                                .putString("email", usuario.getEmail())
+                                .apply();
                         Intent intent = new Intent(IniciarSesionActivity.this, MainActivity.class);
                         intent.putExtra("usuario",usuario);
                         startActivity(intent);
+                        finish();
                     }
                 });
                     tvError.setText("Algunos de los datos es incorrecto. Ingresalos nuevamente");
