@@ -75,7 +75,7 @@ public class IniciarSesionActivity extends AppCompatActivity {
                 else{
                     tvError.setText("Completa los campos para poder seguir");
                 }
-
+//as
             }
         });
 
