@@ -19,3 +19,7 @@ Al avanzar junto con la API, pude realizar un inicio de sesion funcional, en el 
 ## 5 de Febrero
 
 Junto a lo de ayer, ahora pude cambiar el menu DrawerLayout para que muestre el menu de sesion iniciada junto con los datos en el header del menu
+
+## 9 de Febrero
+
+Pude agregar la capacidad de navegar entre Fragments junto con que, al ir al Fragment de perfil de usuario, cargue los datos de la API y los muestra. Además, empece a crear la funcion para el Post de un usuario

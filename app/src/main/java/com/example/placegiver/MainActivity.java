@@ -108,6 +108,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent i = new Intent(MainActivity.this, RegistroActivity.class);
             startActivity(i);
         }
+        else if(item.getItemId() == R.id.btn_menu_inicio){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeFragment()).commit();
+        }
+        else if(item.getItemId() == R.id.btn_menu_cuenta){
+            String nombre = prefs.getString("nombre", "Usuario");
+            getSharedPreferences("usuarioAVer", MODE_PRIVATE).edit().putString("nombre", nombre);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new AccountFragment()).commit();
+        }
         else if(item.getItemId() == R.id.btn_menu_cerrarSesion){
             Toast.makeText(getApplicationContext(), "Sesión cerrada",
                     Toast.LENGTH_LONG);
