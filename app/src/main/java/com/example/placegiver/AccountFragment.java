@@ -56,8 +56,7 @@ public class AccountFragment extends Fragment {
         miLayoutManager = new GridLayoutManager(requireContext(), 1);
         rv.setLayoutManager(miLayoutManager);
 
-        prefs = getContext().getSharedPreferences("usuarioAVer", MODE_PRIVATE);
-        String usuarioAVerNombre = prefs.getString("nombre","as");
+        String usuarioAVerNombre = getArguments().getString("usuario");
         new APIRest().obtenerDatosUsuario(usuarioAVerNombre, ((success, u) -> {
             requireActivity().runOnUiThread(() -> {
                 if (success) {

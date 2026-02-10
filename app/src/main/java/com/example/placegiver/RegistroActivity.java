@@ -25,6 +25,7 @@ public class RegistroActivity extends AppCompatActivity {
     Button btnIniciarSesion, btnCrearCuenta;
     EditText etEmail, etNombre, etPassword, etConfirmPassword;
     TextView tvError;
+    APIRest api = new APIRest();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,40 @@ public class RegistroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(RegistroActivity.this, IniciarSesionActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        btnCrearCuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!etNombre.getText().toString().isEmpty() && !etEmail.getText().toString().isEmpty() &&
+                !etPassword.getText().toString().isEmpty() && !etConfirmPassword.getText().toString().isEmpty()){
+
+                    if (etPassword.getText().toString().equals(etConfirmPassword.getText().toString())){
+
+                        api.crearUsuario(etNombre.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(),success-> {
+                            if(success){
+                                getSharedPreferences("sesion", MODE_PRIVATE)
+                                        .edit()
+                                        .putBoolean("login", true)
+                                        .putString("nombre", etNombre.getText().toString())
+                                        .putString("email",  etEmail.getText().toString())
+                                        .apply();
+                                Intent i = new Intent(RegistroActivity.this, MainActivity.class);
+                                startActivity(i);
+                                finish();
+
+                            }
+                        });
+                        tvError.setText("Algunos datos no son correctos");
+                    }
+                    else{
+                        tvError.setText("La contraseña debe ser igual en ambos campos");
+                    }
+                }
+                else{
+                    tvError.setText("Tienen que completarse todos los campos para registrarse");
+                }
             }
         });
 

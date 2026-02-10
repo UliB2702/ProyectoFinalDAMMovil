@@ -23,3 +23,7 @@ Junto a lo de ayer, ahora pude cambiar el menu DrawerLayout para que muestre el 
 ## 9 de Febrero
 
 Pude agregar la capacidad de navegar entre Fragments junto con que, al ir al Fragment de perfil de usuario, cargue los datos de la API y los muestra. Además, empece a crear la funcion para el Post de un usuario
+
+## 10 de Febrero
+
+Implementado el registro de usuario y capacidad de ver su propio perfil al precionar el boton "Mi cuenta" en el menu

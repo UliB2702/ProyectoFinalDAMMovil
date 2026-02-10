@@ -39,16 +39,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Toolbar tb;
     private SharedPreferences prefs;
     private NavigationView navigationView;
-    ActivityResultLauncher<Intent> launcher, launcher2;
-    Intent i;
-    Usuario u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        i = getIntent();
 
 
 
@@ -63,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeButtonEnabled(true);
+        ab.setDisplayShowTitleEnabled(false);
+        ab.setDisplayUseLogoEnabled(true);
+        ab.setLogo(R.drawable.logo);
+        ab.setTitle("");
 
         toogle = new ActionBarDrawerToggle(this, drawer, tb, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toogle);
@@ -88,12 +88,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             navigationView.inflateMenu(R.menu.menu_sesion_iniciada);
-            u = (Usuario) (i.getSerializableExtra("usuario"));
 
             tvNombre.setText(prefs.getString("nombre", "Usuario"));
             tvCorreo.setText(prefs.getString("email", ""));
 
-            Datos.setU(u);
         } else {
             navigationView.inflateMenu(R.menu.menu_sin_sesion);
         }
@@ -113,15 +111,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if(item.getItemId() == R.id.btn_menu_cuenta){
             String nombre = prefs.getString("nombre", "Usuario");
-            getSharedPreferences("usuarioAVer", MODE_PRIVATE).edit().putString("nombre", nombre);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new AccountFragment()).commit();
+            Log.i("Hola", nombre);
+            Bundle bundle = new Bundle();
+            bundle.putString("usuario", nombre);
+
+            AccountFragment fragment = new AccountFragment();
+            fragment.setArguments(bundle);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  fragment).commit();
         }
         else if(item.getItemId() == R.id.btn_menu_cerrarSesion){
             Toast.makeText(getApplicationContext(), "Sesión cerrada",
                     Toast.LENGTH_LONG);
             prefs.edit().clear().apply();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeFragment()).commit();
             recreate();
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

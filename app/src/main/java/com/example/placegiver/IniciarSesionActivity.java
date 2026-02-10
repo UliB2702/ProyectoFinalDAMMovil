@@ -45,7 +45,7 @@ public class IniciarSesionActivity extends AppCompatActivity {
         tb = findViewById(R.id.toolbar2);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+
         tvError = findViewById(R.id.tvError);
         btnInicioSesion = findViewById(R.id.btnInicioSesion);
         btnRegistro = findViewById(R.id.btnRegistro);
@@ -65,7 +65,6 @@ public class IniciarSesionActivity extends AppCompatActivity {
                                 .putString("email", usuario.getEmail())
                                 .apply();
                         Intent intent = new Intent(IniciarSesionActivity.this, MainActivity.class);
-                        intent.putExtra("usuario",usuario);
                         startActivity(intent);
                         finish();
                     }
@@ -75,7 +74,7 @@ public class IniciarSesionActivity extends AppCompatActivity {
                 else{
                     tvError.setText("Completa los campos para poder seguir");
                 }
-//as
+
             }
         });
 

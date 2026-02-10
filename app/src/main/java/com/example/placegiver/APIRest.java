@@ -27,11 +27,11 @@ public class APIRest {
     }
 
     public interface RegistroCallback{
-        void onRegistroResult(boolean succes);
+        void onRegistroResult(boolean success);
     }
     //API de Usuarios
 
-    public void crearUsuario(String nombre, String password, String email, Date fecha, RegistroCallback callback){
+    public void crearUsuario(String nombre, String password, String email, RegistroCallback callback){
         new Thread(() -> {
             try{
                 URL url = new URL("http://10.0.2.2:8080/apirest_placegiver/rest/usuarios/registro");
@@ -44,7 +44,6 @@ public class APIRest {
                 json.put("descripcion", "");
                 json.put("password", password);
                 json.put("email", email);
-                json.put("fechaCreacion", fecha);
 
                 System.out.println(json);
                 try(OutputStream os = con.getOutputStream()) {
@@ -179,7 +178,7 @@ public class APIRest {
                     { response.append(line.trim());
                     }
                     JSONArray array = new JSONArray(response.toString());
-
+                    Log.i("Posts",array.toString());
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject obj = array.getJSONObject(i);
 
