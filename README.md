@@ -27,3 +27,7 @@ Pude agregar la capacidad de navegar entre Fragments junto con que, al ir al Fra
 ## 10 de Febrero
 
 Implementado el registro de usuario y capacidad de ver su propio perfil al precionar el boton "Mi cuenta" en el menu
+
+## 11 de Febrero
+
+Implementacion de la feed en el menu principal, permitiendo recargar el feed si se vuelve a abrir el menu del inicio. Iniciando la feed para cada usuario

@@ -24,8 +24,32 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    public void recargarPosts() {
+        api.obtenerPostsMasRecientes((success, posts) -> {
+            if (success) {
+                if (adaptador == null) {
+                    adaptador = new AdaptadorPosts(posts, usuario ->{
+                        Bundle bundle = new Bundle();
+                        bundle.putString("usuario", usuario);
+
+                        AccountFragment fragment = new AccountFragment();
+                        fragment.setArguments(bundle);
+
+                        requireActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragment_container,  fragment)
+                                .commit();
+                    });
+                    rv.setAdapter(adaptador);
+                } else {
+                    adaptador.setPosts(posts);
+                    adaptador.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     @Override
@@ -33,13 +57,26 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rv = view.findViewById(R.id.rvFeed);
         miLayoutManager = new GridLayoutManager(requireContext(), 1);
+        rv.setLayoutManager(miLayoutManager);
+        rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         api.obtenerPostsMasRecientes((success, posts)->{
             if(success){
-                adaptador = new AdaptadorPosts(posts);
+                adaptador = new AdaptadorPosts(posts, usuario ->{
+                    Bundle bundle = new Bundle();
+                    bundle.putString("usuario", usuario);
+
+                    AccountFragment fragment = new AccountFragment();
+                    fragment.setArguments(bundle);
+
+                    requireActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container,  fragment)
+                            .commit();
+                });
+                rv.setAdapter(adaptador);
             }
         });
-        rv.setLayoutManager(miLayoutManager);
-        rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL));
-        rv.setAdapter(adaptador);
+
+
     }
 }

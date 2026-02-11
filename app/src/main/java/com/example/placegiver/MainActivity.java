@@ -4,31 +4,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -45,13 +35,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment())
+                    .commit();
+        }
 
 
         tb = findViewById(R.id.toolbar_main);
         setSupportActionBar(tb);
 
-        drawer = findViewById(R.id.main);
+        drawer = findViewById(R.id.mainDrawer);
         navigationView = findViewById(R.id.nav_view);
         prefs = getSharedPreferences("sesion", MODE_PRIVATE);
         navigationView.setNavigationItemSelectedListener(this);
@@ -70,44 +65,63 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private void navegarDesdeDrawer(Fragment fragment) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) {
+            if (fragment instanceof HomeFragment) {
+                ((HomeFragment) fragment).recargarPosts();
+            }
+            drawer.closeDrawer(GravityCompat.START);
+            return;
+        }
+
+        getSupportFragmentManager().popBackStack(
+                null,
+                getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE
+        );
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
+        drawer.closeDrawer(GravityCompat.START);
+    }
+    private void actualizarMenuDrawer() {
+        if (navigationView == null) return;
+
+        boolean sesionIniciada = prefs.getBoolean("login", false);
+
+        navigationView.getMenu().clear();
+        View header = navigationView.getHeaderView(0);
+        TextView tvNombre = header.findViewById(R.id.nav_header_tvnombre);
+        TextView tvCorreo = header.findViewById(R.id.nav_header_tvemail);
+        if (sesionIniciada && prefs.contains("nombre") && prefs.contains("email")) {
+            navigationView.inflateMenu(R.menu.menu_sesion_iniciada);
+            tvNombre.setText(prefs.getString("nombre", "Usuario"));
+            tvCorreo.setText(prefs.getString("email", ""));
+        } else {
+            navigationView.inflateMenu(R.menu.menu_sin_sesion);
+            tvNombre.setText("Usuario");
+            tvCorreo.setText("ejemplo@gmail.com");
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (navigationView == null) return;
-
-        boolean sesionIniciada = prefs.getBoolean("login", false);
-        Log.d("MAIN", "Sesion iniciada: " + sesionIniciada);
-
-        navigationView.getMenu().clear();
-
-        if (sesionIniciada && prefs.contains("nombre") && prefs.contains("email")) {
-            View header = navigationView.getHeaderView(0);
-            TextView tvNombre = header.findViewById(R.id.nav_header_tvnombre);
-            TextView tvCorreo = header.findViewById(R.id.nav_header_tvemail);
-
-
-            navigationView.inflateMenu(R.menu.menu_sesion_iniciada);
-
-            tvNombre.setText(prefs.getString("nombre", "Usuario"));
-            tvCorreo.setText(prefs.getString("email", ""));
-
-        } else {
-            navigationView.inflateMenu(R.menu.menu_sin_sesion);
-        }
+        actualizarMenuDrawer();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.btn_iniciarSesion){
-            Intent i = new Intent(MainActivity.this, IniciarSesionActivity.class);
-            startActivity(i);
+            startActivity(new Intent(MainActivity.this, IniciarSesionActivity.class));
         } else if (item.getItemId() == R.id.btn_crear) {
-            Intent i = new Intent(MainActivity.this, RegistroActivity.class);
-            startActivity(i);
+            startActivity(new Intent(MainActivity.this, RegistroActivity.class));
         }
         else if(item.getItemId() == R.id.btn_menu_inicio){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeFragment()).commit();
+            navegarDesdeDrawer(new HomeFragment());
         }
         else if(item.getItemId() == R.id.btn_menu_cuenta){
             String nombre = prefs.getString("nombre", "Usuario");
@@ -118,16 +132,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             AccountFragment fragment = new AccountFragment();
             fragment.setArguments(bundle);
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  fragment).commit();
+            navegarDesdeDrawer(fragment);
         }
         else if(item.getItemId() == R.id.btn_menu_cerrarSesion){
-            Toast.makeText(getApplicationContext(), "Sesión cerrada",
-                    Toast.LENGTH_LONG);
+
             prefs.edit().clear().apply();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeFragment()).commit();
-            recreate();
+            actualizarMenuDrawer();
+            navegarDesdeDrawer(new HomeFragment());
+            Toast.makeText(getApplicationContext(), "Sesión cerrada",Toast.LENGTH_LONG).show();
         }
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

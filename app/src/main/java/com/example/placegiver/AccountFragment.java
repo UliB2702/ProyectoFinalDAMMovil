@@ -32,7 +32,8 @@ public class AccountFragment extends Fragment {
     AdaptadorPosts adaptadorPosts;
 
     TextView tvNombre, tvDescripcion;
-
+    AdaptadorPosts adaptador;
+    APIRest api = new APIRest();
 
     EditText edtEscribirPost;
 
@@ -41,10 +42,10 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_account, container, false);
 
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class AccountFragment extends Fragment {
         rv = view.findViewById(R.id.rvPostsUsuario);
         miLayoutManager = new GridLayoutManager(requireContext(), 1);
         rv.setLayoutManager(miLayoutManager);
+
 
         String usuarioAVerNombre = getArguments().getString("usuario");
         new APIRest().obtenerDatosUsuario(usuarioAVerNombre, ((success, u) -> {
@@ -73,12 +75,27 @@ public class AccountFragment extends Fragment {
             });
         }));
 
-        //adaptadorPosts = new AdaptadorPosts((new APIRest().obtenerPostsDeUsuario());
-        rv.addItemDecoration(
-                new DividerItemDecoration(requireContext(), DividerItemDecoration.HORIZONTAL)
-        );
-        rv.setAdapter(adaptadorPosts);
+        rv = view.findViewById(R.id.rvFeed);
+        miLayoutManager = new GridLayoutManager(requireContext(), 1);
+        rv.setLayoutManager(miLayoutManager);
+        rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+        api.obtenerPostsDeUsuario(usuarioAVerNombre,(success, posts)->{
+            if(success){
+                adaptador = new AdaptadorPosts(posts, usuario ->{
+                    Bundle bundle = new Bundle();
+                    bundle.putString("usuario", usuario);
 
+                    AccountFragment fragment = new AccountFragment();
+                    fragment.setArguments(bundle);
+
+                    requireActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container,  fragment)
+                            .commit();
+                });
+                rv.setAdapter(adaptador);
+            }
+        });
         edtEscribirPost = view.findViewById(R.id.edtEscrbirPost);
     }
 

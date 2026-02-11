@@ -1,5 +1,6 @@
 package com.example.placegiver;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -16,10 +18,19 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
 
     int selectedPos = RecyclerView.NO_POSITION;
     ArrayList<Post> posts = new ArrayList<Post>();
-    public AdaptadorPosts(ArrayList<Post> posts){
-        this.posts = posts;
+    public interface OnUsuarioClickListener {
+        void onUsuarioClick(String usuario);
     }
 
+    private OnUsuarioClickListener listener;
+
+    public AdaptadorPosts(ArrayList<Post> posts, OnUsuarioClickListener listener){
+        this.posts = posts;
+        this.listener = listener;
+    }
+    public void setPosts(ArrayList<Post> posts) {
+        this.posts = posts;
+    }
     public int getSelectedPos(){
         return selectedPos;
     }
@@ -34,12 +45,14 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
+        Post p = this.posts.get(position);
+        holder.obtenerTexto().setText(p.getTexto());
+        holder.obtenerNombreUsuario().setText(p.getUsuario());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return posts.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -59,6 +72,9 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
             this.imgAdjunto = viewElemento.findViewById(R.id.imgAdjunto);
             this.btnLike = viewElemento.findViewById(R.id.btnLikes);
             this.btnComentarios = viewElemento.findViewById(R.id.btnComentarios);
+
+
+
 
             txtTexto.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,11 +100,23 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
             txtNombreUsuario.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        listener.onUsuarioClick(posts.get(position).getUsuario());
+                    }
 
                 }
             });
 
-
         }
+
+        public TextView obtenerNombreUsuario(){
+            return txtNombreUsuario;
+        }
+        public TextView obtenerTexto(){
+            return txtTexto;
+        }
+
+
     }
 }
