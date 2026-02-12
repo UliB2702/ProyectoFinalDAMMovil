@@ -10,6 +10,7 @@ public class Post implements Serializable {
     private String usuario;
     private int idCategoria;
 
+
     public Post(int id, String texto, String fechaPublicacion, String usuario, int idCategoria) {
         this.id = id;
         this.texto = texto;

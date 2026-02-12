@@ -50,13 +50,18 @@ public class AccountFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        prefs = requireActivity().getSharedPreferences("sesion", MODE_PRIVATE);
         tvNombre = view.findViewById(R.id.txtUsuario);
         tvDescripcion = view.findViewById(R.id.txtDescripcion);
         rv = view.findViewById(R.id.rvPostsUsuario);
         miLayoutManager = new GridLayoutManager(requireContext(), 1);
         rv.setLayoutManager(miLayoutManager);
-
+        rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+        edtEscribirPost = view.findViewById(R.id.edtEscrbirPost);
+        String usuarioActual = prefs.getString("nombre", "");
+        if(!prefs.contains("nombre") || !getArguments().getString("usuario").equals(usuarioActual)){
+            edtEscribirPost.setVisibility(View.GONE);
+        }
 
         String usuarioAVerNombre = getArguments().getString("usuario");
         new APIRest().obtenerDatosUsuario(usuarioAVerNombre, ((success, u) -> {
@@ -75,10 +80,7 @@ public class AccountFragment extends Fragment {
             });
         }));
 
-        rv = view.findViewById(R.id.rvFeed);
-        miLayoutManager = new GridLayoutManager(requireContext(), 1);
-        rv.setLayoutManager(miLayoutManager);
-        rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+
         api.obtenerPostsDeUsuario(usuarioAVerNombre,(success, posts)->{
             if(success){
                 adaptador = new AdaptadorPosts(posts, usuario ->{
@@ -96,7 +98,7 @@ public class AccountFragment extends Fragment {
                 rv.setAdapter(adaptador);
             }
         });
-        edtEscribirPost = view.findViewById(R.id.edtEscrbirPost);
+
     }
 
     @Override

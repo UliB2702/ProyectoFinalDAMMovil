@@ -31,3 +31,7 @@ Implementado el registro de usuario y capacidad de ver su propio perfil al preci
 ## 11 de Febrero
 
 Implementacion de la feed en el menu principal, permitiendo recargar el feed si se vuelve a abrir el menu del inicio. Iniciando la feed para cada usuario
+
+## 12 de Febrero
+
+Implementacion del feed de los posts de un usuario y quitando el menu de subir un post si el usuario no es el de la cuenta que se muestra

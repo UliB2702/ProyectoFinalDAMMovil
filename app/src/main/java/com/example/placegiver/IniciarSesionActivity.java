@@ -43,6 +43,7 @@ public class IniciarSesionActivity extends AppCompatActivity {
         });
 
         tb = findViewById(R.id.toolbar2);
+        tb.setTitle("");
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
 

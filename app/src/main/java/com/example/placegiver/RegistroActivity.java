@@ -39,6 +39,7 @@ public class RegistroActivity extends AppCompatActivity {
         });
 
         tb = findViewById(R.id.toolbar3);
+        tb.setTitle("");
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);

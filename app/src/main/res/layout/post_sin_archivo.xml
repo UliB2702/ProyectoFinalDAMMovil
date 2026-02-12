@@ -44,7 +44,7 @@
 
     <Button
         android:id="@+id/btnLikes"
-        android:layout_width="wrap_content"
+        android:layout_width="115dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
         android:background="#00FFFFFF"
@@ -53,7 +53,7 @@
         app:icon="@drawable/heart"
         app:iconTint="#000000"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgAdjunto" />
+        app:layout_constraintTop_toBottomOf="@+id/txtMensaje" />
 
     <Button
         android:id="@+id/btnComentarios"
@@ -66,15 +66,6 @@
         app:iconTint="#020000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnLikes"
-        app:layout_constraintTop_toBottomOf="@+id/imgAdjunto" />
+        app:layout_constraintTop_toBottomOf="@+id/txtMensaje" />
 
-    <ImageView
-        android:id="@+id/imgAdjunto"
-        android:layout_width="0dp"
-        android:layout_height="252dp"
-        android:paddingTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtMensaje"
-        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
