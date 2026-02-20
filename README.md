@@ -35,3 +35,7 @@ Implementacion de la feed en el menu principal, permitiendo recargar el feed si 
 ## 12 de Febrero
 
 Implementacion del feed de los posts de un usuario y quitando el menu de subir un post si el usuario no es el de la cuenta que se muestra
+
+## 20 de Febrero
+
+Pude arreglar un error que mostraba todos los posts que habian en la cuenta de un usuario en lugar de solo mostrar los del propio usuario

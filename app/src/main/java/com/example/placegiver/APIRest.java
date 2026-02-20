@@ -209,7 +209,7 @@ public class APIRest {
         new Thread(()-> {
             try {
                 URL url = new URL(
-                        "http://10.0.2.2:8080/apirest_placegiver/rest/posts?nombre=" + nombre);
+                        "http://10.0.2.2:8080/apirest_placegiver/rest/posts/usuario?nombre=" + nombre);
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
