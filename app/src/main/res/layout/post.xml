@@ -25,9 +25,21 @@
         android:layout_marginTop="32dp"
         android:text="Textview"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintEnd_toStartOf="@+id/btnBorrar"
         app:layout_constraintStart_toEndOf="@+id/imgFotoUsuario"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnBorrar"
+        android:layout_width="64dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#FF0101"
+        app:icon="@drawable/delete"
+        app:iconPadding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtUserName"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -77,4 +89,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtMensaje"
         tools:srcCompat="@tools:sample/avatars" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

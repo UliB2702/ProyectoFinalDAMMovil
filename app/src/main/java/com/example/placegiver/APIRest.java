@@ -51,8 +51,13 @@ public class APIRest {
                 }
                 System.out.println("jj");
                 int code = con.getResponseCode();
-                Log.i("API", "Código respuesta: " + code);
-                callback.onRegistroResult(true);
+                if(code == 201){
+                    callback.onRegistroResult(true);
+                } else if(code == 409){
+                    callback.onRegistroResult(false);
+                } else {
+                    callback.onRegistroResult(false);
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -203,13 +208,61 @@ public class APIRest {
         }).start();
 
     }
+    public void crearPost(String texto, String usuario, RegistroCallback callback){
+        new Thread(() -> {
+            try{
+                URL url = new URL("http://10.0.2.2:8080/apirest_placegiver/rest/posts/publicar");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setDoOutput(true);
+                JSONObject json = new JSONObject();
+                json.put("texto", texto);
+                json.put("usuario", usuario);
+                System.out.println(json);
+                try(OutputStream os = con.getOutputStream()) {
+                    os.write(json.toString().getBytes(StandardCharsets.UTF_8));
+                }
+                System.out.println("jj");
+                int code = con.getResponseCode();
+                Log.i("API", "Código respuesta: " + code);
+                callback.onRegistroResult(true);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                callback.onRegistroResult(false);
+            }
+        }).start();
+    }
+
+    public void borrarPost(int id, RegistroCallback callback){
+        new Thread(() ->{
+            try{
+                URL url = new URL("http://10.0.2.2:8080/apirest_placegiver/rest/posts/" + id);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("DELETE");
+                con.setDoOutput(true);
+                int code = con.getResponseCode();
+                if(code == 201 || code == 200){
+                    callback.onRegistroResult(true);
+                } else if(code == 409){
+                    callback.onRegistroResult(false);
+                } else {
+                    callback.onRegistroResult(false);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                callback.onRegistroResult(false);
+            }
+        }).start();
+    }
 
     public void obtenerPostsDeUsuario(String nombre, PostsCallback callback){
         ArrayList<Post> posts = new ArrayList<>();
         new Thread(()-> {
             try {
                 URL url = new URL(
-                        "http://10.0.2.2:8080/apirest_placegiver/rest/posts/usuario?nombre=" + nombre);
+                        "http://10.0.2.2:8080/apirest_placegiver/rest/posts/" + nombre);
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -255,4 +308,7 @@ public class APIRest {
         }).start();
 
     }
+
+
+
 }

@@ -39,3 +39,7 @@ Implementacion del feed de los posts de un usuario y quitando el menu de subir u
 ## 20 de Febrero
 
 Pude arreglar un error que mostraba todos los posts que habian en la cuenta de un usuario en lugar de solo mostrar los del propio usuario
+
+## 24 de Febrero
+
+Pude agregar la capacidad de crear post, evitar que se cree un usuario con un nombre que ya existe y empezando a implementar el borrado de un post

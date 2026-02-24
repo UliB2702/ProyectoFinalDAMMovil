@@ -18,15 +18,17 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
 
     int selectedPos = RecyclerView.NO_POSITION;
     ArrayList<Post> posts = new ArrayList<Post>();
+    private String usuarioSesion;
     public interface OnUsuarioClickListener {
         void onUsuarioClick(String usuario);
     }
 
     private OnUsuarioClickListener listener;
 
-    public AdaptadorPosts(ArrayList<Post> posts, OnUsuarioClickListener listener){
+    public AdaptadorPosts(ArrayList<Post> posts, String usuarioSesion, OnUsuarioClickListener listener){
         this.posts = posts;
         this.listener = listener;
+        this.usuarioSesion = usuarioSesion;
     }
     public void setPosts(ArrayList<Post> posts) {
         this.posts = posts;
@@ -48,6 +50,11 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
         Post p = this.posts.get(position);
         holder.obtenerTexto().setText(p.getTexto());
         holder.obtenerNombreUsuario().setText(p.getUsuario());
+        if(p.getUsuario().equals(usuarioSesion)){
+            holder.btnBorrar.setVisibility(View.VISIBLE);
+        } else {
+            holder.btnBorrar.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -61,7 +68,7 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
         TextView txtTexto;
         ImageView imgUsuario;
         ImageView imgAdjunto;
-        Button btnLike, btnComentarios;
+        Button btnLike, btnComentarios, btnBorrar;
 
         public MyViewHolder(View viewElemento){
             super(viewElemento);
@@ -72,6 +79,7 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
             this.imgAdjunto = viewElemento.findViewById(R.id.imgAdjunto);
             this.btnLike = viewElemento.findViewById(R.id.btnLikes);
             this.btnComentarios = viewElemento.findViewById(R.id.btnComentarios);
+            this.btnBorrar = viewElemento.findViewById(R.id.btnBorrar);
 
 
 
@@ -83,6 +91,13 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
                 }
             });
             imgAdjunto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            btnBorrar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 

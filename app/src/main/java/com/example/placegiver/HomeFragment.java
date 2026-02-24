@@ -1,5 +1,8 @@
 package com.example.placegiver;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +23,7 @@ public class HomeFragment extends Fragment {
     RecyclerView.LayoutManager miLayoutManager;
     AdaptadorPosts adaptador;
     APIRest api = new APIRest();
+    private SharedPreferences prefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,20 +32,18 @@ public class HomeFragment extends Fragment {
     }
 
     public void recargarPosts() {
+        String usuarioActual = prefs.getString("nombre", "");
         api.obtenerPostsMasRecientes((success, posts) -> {
             if (success) {
                 if (adaptador == null) {
-                    adaptador = new AdaptadorPosts(posts, usuario ->{
+                    adaptador = new AdaptadorPosts(posts, usuarioActual, usuario ->{
                         Bundle bundle = new Bundle();
                         bundle.putString("usuario", usuario);
 
                         AccountFragment fragment = new AccountFragment();
                         fragment.setArguments(bundle);
 
-                        requireActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fragment_container,  fragment)
-                                .commit();
+                        ((MainActivity) requireActivity()).navegarA(fragment, true);
                     });
                     rv.setAdapter(adaptador);
                 } else {
@@ -54,24 +56,24 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
         rv = view.findViewById(R.id.rvFeed);
+        prefs = requireActivity().getSharedPreferences("sesion", MODE_PRIVATE);
+        String usuarioActual = prefs.getString("nombre", "");
         miLayoutManager = new GridLayoutManager(requireContext(), 1);
         rv.setLayoutManager(miLayoutManager);
         rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         api.obtenerPostsMasRecientes((success, posts)->{
             if(success){
-                adaptador = new AdaptadorPosts(posts, usuario ->{
+                adaptador = new AdaptadorPosts(posts, usuarioActual , usuario ->{
                     Bundle bundle = new Bundle();
                     bundle.putString("usuario", usuario);
 
                     AccountFragment fragment = new AccountFragment();
                     fragment.setArguments(bundle);
 
-                    requireActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_container,  fragment)
-                            .commit();
+                    ((MainActivity) requireActivity()).navegarA(fragment, true);
                 });
                 rv.setAdapter(adaptador);
             }

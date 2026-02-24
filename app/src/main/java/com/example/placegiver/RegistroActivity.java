@@ -65,6 +65,7 @@ public class RegistroActivity extends AppCompatActivity {
                 if(!etNombre.getText().toString().isEmpty() && !etEmail.getText().toString().isEmpty() &&
                 !etPassword.getText().toString().isEmpty() && !etConfirmPassword.getText().toString().isEmpty()){
 
+
                     if (etPassword.getText().toString().equals(etConfirmPassword.getText().toString())){
 
                         api.crearUsuario(etNombre.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(),success-> {

@@ -19,6 +19,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -64,27 +66,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+    public void navegarA(Fragment fragment, boolean agregarBackStack) {
+        Fragment current = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-    private void navegarDesdeDrawer(Fragment fragment) {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (current instanceof AccountFragment && fragment instanceof AccountFragment) {
+            Bundle argsNuevo = fragment.getArguments();
+            Bundle argsActual = current.getArguments();
 
-        if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) {
-            if (fragment instanceof HomeFragment) {
-                ((HomeFragment) fragment).recargarPosts();
+            String usuarioNuevo = argsNuevo != null ? argsNuevo.getString("usuario", "") : "";
+            String usuarioActual = argsActual != null ? argsActual.getString("usuario", "") : "";
+
+            if (usuarioNuevo.equals(usuarioActual)) {
+                drawer.closeDrawer(GravityCompat.START);
+                return;
             }
+        } else if (current != null && current.getClass().equals(fragment.getClass())) {
             drawer.closeDrawer(GravityCompat.START);
             return;
         }
 
-        getSupportFragmentManager().popBackStack(
-                null,
-                getSupportFragmentManager().POP_BACK_STACK_INCLUSIVE
-        );
-        getSupportFragmentManager()
+        FragmentTransaction ft = getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+                .replace(R.id.fragment_container, fragment);
+
+        if (agregarBackStack) {
+            ft.addToBackStack(null);
+        }
+
+        ft.commitAllowingStateLoss();
         drawer.closeDrawer(GravityCompat.START);
+    }
+    private void navegarDesdeDrawer(Fragment fragment) {
+        navegarA(fragment, false);
     }
     private void actualizarMenuDrawer() {
         if (navigationView == null) return;
@@ -124,10 +137,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navegarDesdeDrawer(new HomeFragment());
         }
         else if(item.getItemId() == R.id.btn_menu_cuenta){
-            String nombre = prefs.getString("nombre", "Usuario");
-            Log.i("Hola", nombre);
+            String nombreSesion = prefs.getString("nombre", "Usuario");
+
             Bundle bundle = new Bundle();
-            bundle.putString("usuario", nombre);
+            bundle.putString("usuario", nombreSesion);
 
             AccountFragment fragment = new AccountFragment();
             fragment.setArguments(bundle);

@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,12 +26,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class AccountFragment extends Fragment {
-
+    private String usuarioMostrado;
     RecyclerView rv;
     RecyclerView.LayoutManager miLayoutManager;
     ActivityResultLauncher<Intent> launcherPost;
     AdaptadorPosts adaptadorPosts;
 
+    Button btnEnviarPost;
     TextView tvNombre, tvDescripcion;
     AdaptadorPosts adaptador;
     APIRest api = new APIRest();
@@ -45,15 +47,20 @@ public class AccountFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_account, container, false);
 
     }
-
+    public String getUsuarioMostrado() {
+        return usuarioMostrado;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
+        usuarioMostrado = getArguments().getString("usuario");
         prefs = requireActivity().getSharedPreferences("sesion", MODE_PRIVATE);
         tvNombre = view.findViewById(R.id.txtUsuario);
         tvDescripcion = view.findViewById(R.id.txtDescripcion);
         rv = view.findViewById(R.id.rvPostsUsuario);
+        btnEnviarPost = view.findViewById(R.id.btnEnvioPost);
         miLayoutManager = new GridLayoutManager(requireContext(), 1);
         rv.setLayoutManager(miLayoutManager);
         rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
@@ -61,6 +68,7 @@ public class AccountFragment extends Fragment {
         String usuarioActual = prefs.getString("nombre", "");
         if(!prefs.contains("nombre") || !getArguments().getString("usuario").equals(usuarioActual)){
             edtEscribirPost.setVisibility(View.GONE);
+            btnEnviarPost.setVisibility(View.GONE);
         }
 
         String usuarioAVerNombre = getArguments().getString("usuario");
@@ -80,24 +88,23 @@ public class AccountFragment extends Fragment {
             });
         }));
 
+        btnEnviarPost.setOnClickListener(v -> {
+            String texto = edtEscribirPost.getText().toString().trim();
 
-        api.obtenerPostsDeUsuario(usuarioAVerNombre,(success, posts)->{
-            if(success){
-                adaptador = new AdaptadorPosts(posts, usuario ->{
-                    Bundle bundle = new Bundle();
-                    bundle.putString("usuario", usuario);
+            if (!texto.isEmpty()) {
 
-                    AccountFragment fragment = new AccountFragment();
-                    fragment.setArguments(bundle);
-
-                    requireActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment_container,  fragment)
-                            .commit();
+                api.crearPost(texto, tvNombre.getText().toString(), success -> {
+                    if (success) {
+                        requireActivity().runOnUiThread(() -> {
+                            edtEscribirPost.setText("");
+                            cargarPosts(tvNombre.getText().toString());
+                        });
+                    }
                 });
-                rv.setAdapter(adaptador);
             }
         });
+
+        cargarPosts(usuarioAVerNombre);
 
     }
 
@@ -114,5 +121,26 @@ public class AccountFragment extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void cargarPosts(String usuario) {
+        String usuarioActual = prefs.getString("nombre", "");
+        api.obtenerPostsDeUsuario(usuario, (success, posts) -> {
+            requireActivity().runOnUiThread(() -> {
+                if (success) {
+                    adaptador = new AdaptadorPosts(posts, usuarioActual, usuarioClick ->{
+                        Bundle bundle = new Bundle();
+                        bundle.putString("usuario", usuario);
+
+                        AccountFragment fragment = new AccountFragment();
+                        fragment.setArguments(bundle);
+
+                        ((MainActivity) requireActivity()).navegarA(fragment, true);
+                    });
+
+                    rv.setAdapter(adaptador);
+                }
+            });
+        });
     }
 }
