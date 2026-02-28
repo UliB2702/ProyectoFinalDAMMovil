@@ -69,8 +69,11 @@ public class IniciarSesionActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
+                    else{
+                        tvError.setText("Algunos de los datos es incorrecto. Ingresalos nuevamente");
+                    }
                 });
-                    tvError.setText("Algunos de los datos es incorrecto. Ingresalos nuevamente");
+
                 }
                 else{
                     tvError.setText("Completa los campos para poder seguir");

@@ -44,7 +44,18 @@ public class HomeFragment extends Fragment {
                         fragment.setArguments(bundle);
 
                         ((MainActivity) requireActivity()).navegarA(fragment, true);
-                    });
+                    },
+                            (post, position) -> {
+
+                                api.borrarPost(post.getId(), success2 -> {
+                                    requireActivity().runOnUiThread(() -> {
+                                        if(success2){
+                                            adaptador.eliminarPost(position);
+                                        }
+                                    });
+                                });
+
+                            });
                     rv.setAdapter(adaptador);
                 } else {
                     adaptador.setPosts(posts);
@@ -74,7 +85,18 @@ public class HomeFragment extends Fragment {
                     fragment.setArguments(bundle);
 
                     ((MainActivity) requireActivity()).navegarA(fragment, true);
-                });
+                },
+                        (post, position) -> {
+
+                            api.borrarPost(post.getId(), success2 -> {
+                                requireActivity().runOnUiThread(() -> {
+                                    if(success2){
+                                        adaptador.eliminarPost(position);
+                                    }
+                                });
+                            });
+
+                        });
                 rv.setAdapter(adaptador);
             }
         });

@@ -32,7 +32,7 @@ public class AccountFragment extends Fragment {
     ActivityResultLauncher<Intent> launcherPost;
     AdaptadorPosts adaptadorPosts;
 
-    Button btnEnviarPost;
+    Button btnEnviarPost, btnEdit;
     TextView tvNombre, tvDescripcion;
     AdaptadorPosts adaptador;
     APIRest api = new APIRest();
@@ -58,6 +58,7 @@ public class AccountFragment extends Fragment {
         usuarioMostrado = getArguments().getString("usuario");
         prefs = requireActivity().getSharedPreferences("sesion", MODE_PRIVATE);
         tvNombre = view.findViewById(R.id.txtUsuario);
+        btnEdit = view.findViewById(R.id.btnEdit);
         tvDescripcion = view.findViewById(R.id.txtDescripcion);
         rv = view.findViewById(R.id.rvPostsUsuario);
         btnEnviarPost = view.findViewById(R.id.btnEnvioPost);
@@ -69,6 +70,7 @@ public class AccountFragment extends Fragment {
         if(!prefs.contains("nombre") || !getArguments().getString("usuario").equals(usuarioActual)){
             edtEscribirPost.setVisibility(View.GONE);
             btnEnviarPost.setVisibility(View.GONE);
+            btnEdit.setVisibility(View.GONE);
         }
 
         String usuarioAVerNombre = getArguments().getString("usuario");
@@ -136,7 +138,18 @@ public class AccountFragment extends Fragment {
                         fragment.setArguments(bundle);
 
                         ((MainActivity) requireActivity()).navegarA(fragment, true);
-                    });
+                    },
+                            (post, position) -> {
+
+                                api.borrarPost(post.getId(), success2 -> {
+                                    requireActivity().runOnUiThread(() -> {
+                                        if(success2){
+                                            adaptador.eliminarPost(position);
+                                        }
+                                    });
+                                });
+
+                            });
 
                     rv.setAdapter(adaptador);
                 }

@@ -43,3 +43,7 @@ Pude arreglar un error que mostraba todos los posts que habian en la cuenta de u
 ## 24 de Febrero
 
 Pude agregar la capacidad de crear post, evitar que se cree un usuario con un nombre que ya existe y empezando a implementar el borrado de un post
+
+## 28 de Febrero
+
+Añadida la funcion de borrar post mientras sea del usuario con el que se iniciara sesion

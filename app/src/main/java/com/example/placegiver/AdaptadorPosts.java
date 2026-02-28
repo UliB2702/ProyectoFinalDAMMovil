@@ -22,19 +22,33 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
     public interface OnUsuarioClickListener {
         void onUsuarioClick(String usuario);
     }
+    public interface OnPostDeleteListener {
+        void onPostDelete(Post post, int position);
+    }
 
     private OnUsuarioClickListener listener;
+    private OnPostDeleteListener deleteListener;
 
-    public AdaptadorPosts(ArrayList<Post> posts, String usuarioSesion, OnUsuarioClickListener listener){
+
+    public AdaptadorPosts(ArrayList<Post> posts, String usuarioSesion,
+                          OnUsuarioClickListener listener,
+                          OnPostDeleteListener deleteListener){
         this.posts = posts;
         this.listener = listener;
         this.usuarioSesion = usuarioSesion;
+        this.deleteListener = deleteListener;
+
     }
     public void setPosts(ArrayList<Post> posts) {
         this.posts = posts;
     }
     public int getSelectedPos(){
         return selectedPos;
+    }
+    public void eliminarPost(int position){
+        posts.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, posts.size());
     }
 
     @NonNull
@@ -50,6 +64,7 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
         Post p = this.posts.get(position);
         holder.obtenerTexto().setText(p.getTexto());
         holder.obtenerNombreUsuario().setText(p.getUsuario());
+        holder.ponerId(p.getId());
         if(p.getUsuario().equals(usuarioSesion)){
             holder.btnBorrar.setVisibility(View.VISIBLE);
         } else {
@@ -69,6 +84,8 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
         ImageView imgUsuario;
         ImageView imgAdjunto;
         Button btnLike, btnComentarios, btnBorrar;
+
+        int id;
 
         public MyViewHolder(View viewElemento){
             super(viewElemento);
@@ -100,7 +117,10 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
             btnBorrar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        deleteListener.onPostDelete(posts.get(position), position);
+                    }
                 }
             });
 
@@ -135,6 +155,10 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
             return txtTexto;
         }
 
+        public int obtenerId(){return id;}
 
+        public void ponerId(int id){
+            this.id = id;
+        }
     }
 }

@@ -29,6 +29,10 @@ public class APIRest {
     public interface RegistroCallback{
         void onRegistroResult(boolean success);
     }
+
+    public interface DeleteCallback {
+        void onDeleteResult(boolean success);
+    }
     //API de Usuarios
 
     public void crearUsuario(String nombre, String password, String email, RegistroCallback callback){
@@ -58,7 +62,7 @@ public class APIRest {
                 } else {
                     callback.onRegistroResult(false);
                 }
-
+                con.disconnect();
             } catch (Exception e) {
                 e.printStackTrace();
                 callback.onRegistroResult(false);
@@ -103,7 +107,7 @@ public class APIRest {
             else {
                 callback.onLoginResult(false, null);
             }
-
+            conn.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
             callback.onLoginResult(false, null);
@@ -145,7 +149,7 @@ public class APIRest {
             }else {
                 callback.onLoginResult(false, null);
             }
-
+            conn.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
             callback.onLoginResult(false, null);
@@ -200,7 +204,7 @@ public class APIRest {
                 else{
                     callback.onPostsResult(false, null);
                 }
-
+                conn.disconnect();
             } catch (Exception e) {
                 e.printStackTrace();
                 callback.onPostsResult(false, null);
@@ -227,7 +231,7 @@ public class APIRest {
                 int code = con.getResponseCode();
                 Log.i("API", "Código respuesta: " + code);
                 callback.onRegistroResult(true);
-
+                con.disconnect();
             } catch (Exception e) {
                 e.printStackTrace();
                 callback.onRegistroResult(false);
@@ -235,24 +239,24 @@ public class APIRest {
         }).start();
     }
 
-    public void borrarPost(int id, RegistroCallback callback){
+    public void borrarPost(int id, DeleteCallback callback){
         new Thread(() ->{
             try{
                 URL url = new URL("http://10.0.2.2:8080/apirest_placegiver/rest/posts/" + id);
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("DELETE");
-                con.setDoOutput(true);
                 int code = con.getResponseCode();
-                if(code == 201 || code == 200){
-                    callback.onRegistroResult(true);
+                if(code == 200 || code == 204){
+                    callback.onDeleteResult(true);
                 } else if(code == 409){
-                    callback.onRegistroResult(false);
+                    callback.onDeleteResult(false);
                 } else {
-                    callback.onRegistroResult(false);
+                    callback.onDeleteResult(false);
                 }
+                con.disconnect();
             }catch (Exception e){
                 e.printStackTrace();
-                callback.onRegistroResult(false);
+                callback.onDeleteResult(false);
             }
         }).start();
     }
@@ -300,7 +304,7 @@ public class APIRest {
                 else{
                     callback.onPostsResult(false, null);
                 }
-
+                conn.disconnect();
             } catch (Exception e) {
                 e.printStackTrace();
                 callback.onPostsResult(false, null);
