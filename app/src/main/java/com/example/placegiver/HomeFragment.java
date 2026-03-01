@@ -76,29 +76,32 @@ public class HomeFragment extends Fragment {
         rv.setLayoutManager(miLayoutManager);
         rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         api.obtenerPostsMasRecientes((success, posts)->{
-            if(success){
-                adaptador = new AdaptadorPosts(posts, usuarioActual , usuario ->{
-                    Bundle bundle = new Bundle();
-                    bundle.putString("usuario", usuario);
+            requireActivity().runOnUiThread(() -> {
+                if(success){
+                    adaptador = new AdaptadorPosts(posts, usuarioActual , usuario ->{
+                        Bundle bundle = new Bundle();
+                        bundle.putString("usuario", usuario);
 
-                    AccountFragment fragment = new AccountFragment();
-                    fragment.setArguments(bundle);
+                        AccountFragment fragment = new AccountFragment();
+                        fragment.setArguments(bundle);
 
-                    ((MainActivity) requireActivity()).navegarA(fragment, true);
-                },
-                        (post, position) -> {
+                        ((MainActivity) requireActivity()).navegarA(fragment, true);
+                    },
+                            (post, position) -> {
 
-                            api.borrarPost(post.getId(), success2 -> {
-                                requireActivity().runOnUiThread(() -> {
-                                    if(success2){
-                                        adaptador.eliminarPost(position);
-                                    }
+                                api.borrarPost(post.getId(), success2 -> {
+                                    requireActivity().runOnUiThread(() -> {
+                                        if(success2){
+                                            adaptador.eliminarPost(position);
+                                        }
+                                    });
                                 });
-                            });
 
-                        });
-                rv.setAdapter(adaptador);
-            }
+                            });
+                    rv.setAdapter(adaptador);
+                }
+            });
+
         });
 
 

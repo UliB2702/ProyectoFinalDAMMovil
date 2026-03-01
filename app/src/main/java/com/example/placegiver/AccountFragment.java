@@ -26,13 +26,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class AccountFragment extends Fragment {
-    private String usuarioMostrado;
     RecyclerView rv;
     RecyclerView.LayoutManager miLayoutManager;
     ActivityResultLauncher<Intent> launcherPost;
     AdaptadorPosts adaptadorPosts;
 
-    Button btnEnviarPost, btnEdit;
+    Button btnEnviarPost, btnEdit, btnSeguir;
     TextView tvNombre, tvDescripcion;
     AdaptadorPosts adaptador;
     APIRest api = new APIRest();
@@ -47,18 +46,22 @@ public class AccountFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_account, container, false);
 
     }
-    public String getUsuarioMostrado() {
-        return usuarioMostrado;
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        usuarioMostrado = getArguments().getString("usuario");
+        Bundle args = getArguments();
+        String usuarioArgumento = "";
+        if (args != null && args.containsKey("usuario")) {
+            usuarioArgumento = args.getString("usuario", "");
+        } else {
+            usuarioArgumento = "";
+        }
         prefs = requireActivity().getSharedPreferences("sesion", MODE_PRIVATE);
         tvNombre = view.findViewById(R.id.txtUsuario);
         btnEdit = view.findViewById(R.id.btnEdit);
+        btnSeguir = view.findViewById(R.id.btnSeguir);
         tvDescripcion = view.findViewById(R.id.txtDescripcion);
         rv = view.findViewById(R.id.rvPostsUsuario);
         btnEnviarPost = view.findViewById(R.id.btnEnvioPost);
@@ -66,20 +69,23 @@ public class AccountFragment extends Fragment {
         rv.setLayoutManager(miLayoutManager);
         rv.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         edtEscribirPost = view.findViewById(R.id.edtEscrbirPost);
+
         String usuarioActual = prefs.getString("nombre", "");
+
+
         if(!prefs.contains("nombre") || !getArguments().getString("usuario").equals(usuarioActual)){
             edtEscribirPost.setVisibility(View.GONE);
             btnEnviarPost.setVisibility(View.GONE);
             btnEdit.setVisibility(View.GONE);
+            btnSeguir.setVisibility(View.VISIBLE);
         }
 
-        String usuarioAVerNombre = getArguments().getString("usuario");
+        String usuarioAVerNombre = usuarioArgumento;
         new APIRest().obtenerDatosUsuario(usuarioAVerNombre, ((success, u) -> {
             requireActivity().runOnUiThread(() -> {
                 if (success) {
                     tvNombre.setText(u.getNombre());
                     tvDescripcion.setText(u.getDescripcion());
-                    Log.i("Hola", u.getDescripcion() == null ? "Si" : "No");
                     if (u.getDescripcion() == null) {
                         tvDescripcion.setText("");
                     } else {
@@ -103,6 +109,14 @@ public class AccountFragment extends Fragment {
                         });
                     }
                 });
+            }
+        });
+
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(requireContext(), EditarPerfilActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -132,7 +146,7 @@ public class AccountFragment extends Fragment {
                 if (success) {
                     adaptador = new AdaptadorPosts(posts, usuarioActual, usuarioClick ->{
                         Bundle bundle = new Bundle();
-                        bundle.putString("usuario", usuario);
+                        bundle.putString("usuario", usuarioClick);
 
                         AccountFragment fragment = new AccountFragment();
                         fragment.setArguments(bundle);

@@ -30,11 +30,48 @@ public class APIRest {
         void onRegistroResult(boolean success);
     }
 
+    public interface UpdateUsuarioCallback {
+        void onUpdateUsuarioResult(boolean success);
+    }
     public interface DeleteCallback {
         void onDeleteResult(boolean success);
     }
     //API de Usuarios
+    public void updateUsuario(String nombre, String password, String email, String descripcion, UpdateUsuarioCallback callback){
+        new Thread(() -> {
+            try {
+                URL url = new URL("http://10.0.2.2:8080/apirest_placegiver/rest/usuarios/actualizar");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("PUT");
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setDoOutput(true);
+                JSONObject json = new JSONObject();
+                json.put("nombre", nombre);
+                json.put("descripcion", descripcion);
+                json.put("password", password);
+                json.put("email", email);
+                System.out.println(json);
 
+                try(OutputStream os = con.getOutputStream()) {
+                    os.write(json.toString().getBytes(StandardCharsets.UTF_8));
+                }
+
+                int code = con.getResponseCode();
+                if(code == 201 || code == 200){
+                    callback.onUpdateUsuarioResult(true);
+                } else if(code == 409){
+                    callback.onUpdateUsuarioResult(false);
+                } else {
+                    callback.onUpdateUsuarioResult(false);
+                }
+                con.disconnect();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                callback.onUpdateUsuarioResult(false);
+            }
+        }).start();
+    }
     public void crearUsuario(String nombre, String password, String email, RegistroCallback callback){
         new Thread(() -> {
             try{
@@ -136,11 +173,19 @@ public class APIRest {
             while ((line = reader.readLine()) != null)
             { response.append(line.trim());
             }
-
+            System.out.println(code + "");
             if (code == 200) {
-                JSONObject obj = new JSONObject(response.toString());
+                if (response.toString().isEmpty()
+                        || response.toString().equals("{}")) {
 
-                System.out.println(obj);
+                    callback.onLoginResult(false, null);
+                    return;
+                }
+                JSONObject obj = new JSONObject(response.toString());
+                if (!obj.has("email") || obj.isNull("email")) {
+                    callback.onLoginResult(false, null);
+                    return;
+                }
                 String email = obj.getString("email");
                 String desc = obj.getString("descripcion");
                 String fecha = obj.getString("fechaCreacion");

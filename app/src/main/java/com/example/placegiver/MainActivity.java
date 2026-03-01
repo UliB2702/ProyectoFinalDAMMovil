@@ -37,20 +37,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new HomeFragment())
-                    .commit();
-        }
-
-
         tb = findViewById(R.id.toolbar_main);
         setSupportActionBar(tb);
 
         drawer = findViewById(R.id.mainDrawer);
         navigationView = findViewById(R.id.nav_view);
         prefs = getSharedPreferences("sesion", MODE_PRIVATE);
+
+        toogle = new ActionBarDrawerToggle(this, drawer, tb, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toogle);
+        toogle.syncState();
+
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBar ab = getSupportActionBar();
@@ -61,40 +58,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ab.setLogo(R.drawable.logo);
         ab.setTitle("");
 
-        toogle = new ActionBarDrawerToggle(this, drawer, tb, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toogle);
+
+        actualizarMenuDrawer();
 
 
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment())
+                    .commit();
+
+            navigationView.setCheckedItem(R.id.btn_menu_inicio);
+
+        }
     }
     public void navegarA(Fragment fragment, boolean agregarBackStack) {
-        Fragment current = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-
-        if (current instanceof AccountFragment && fragment instanceof AccountFragment) {
-            Bundle argsNuevo = fragment.getArguments();
-            Bundle argsActual = current.getArguments();
-
-            String usuarioNuevo = argsNuevo != null ? argsNuevo.getString("usuario", "") : "";
-            String usuarioActual = argsActual != null ? argsActual.getString("usuario", "") : "";
-
-            if (usuarioNuevo.equals(usuarioActual)) {
-                drawer.closeDrawer(GravityCompat.START);
-                return;
-            }
-        } else if (current != null && current.getClass().equals(fragment.getClass())) {
-            drawer.closeDrawer(GravityCompat.START);
-            return;
-        }
-
-        FragmentTransaction ft = getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment);
-
-        if (agregarBackStack) {
-            ft.addToBackStack(null);
-        }
-
-        ft.commitAllowingStateLoss();
         drawer.closeDrawer(GravityCompat.START);
+
+            Fragment current = getSupportFragmentManager()
+                    .findFragmentById(R.id.fragment_container);
+
+            if (current != null &&
+                    current.getClass().equals(fragment.getClass())) {
+
+                Bundle currentArgs = current.getArguments();
+                Bundle newArgs = fragment.getArguments();
+
+                if (currentArgs != null && newArgs != null &&
+                        currentArgs.equals(newArgs)) {
+                    return;
+                }
+            }
+
+            FragmentTransaction ft = getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment);
+
+            if (agregarBackStack) {
+                ft.addToBackStack(null);
+            }
+
+            ft.commit();
     }
     private void navegarDesdeDrawer(Fragment fragment) {
         navegarA(fragment, false);
@@ -105,15 +109,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean sesionIniciada = prefs.getBoolean("login", false);
 
         navigationView.getMenu().clear();
+        if (sesionIniciada) {
+            navigationView.inflateMenu(R.menu.menu_sesion_iniciada);
+        } else {
+            navigationView.inflateMenu(R.menu.menu_sin_sesion);
+        }
+        navigationView.getMenu()
+                .setGroupCheckable(R.id.group_principal, true, true);
+        navigationView.setCheckedItem(R.id.btn_menu_inicio);
+
         View header = navigationView.getHeaderView(0);
         TextView tvNombre = header.findViewById(R.id.nav_header_tvnombre);
         TextView tvCorreo = header.findViewById(R.id.nav_header_tvemail);
         if (sesionIniciada && prefs.contains("nombre") && prefs.contains("email")) {
-            navigationView.inflateMenu(R.menu.menu_sesion_iniciada);
             tvNombre.setText(prefs.getString("nombre", "Usuario"));
             tvCorreo.setText(prefs.getString("email", ""));
         } else {
-            navigationView.inflateMenu(R.menu.menu_sin_sesion);
             tvNombre.setText("Usuario");
             tvCorreo.setText("ejemplo@gmail.com");
         }
@@ -122,8 +133,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-
-        actualizarMenuDrawer();
     }
 
     @Override
@@ -150,10 +159,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if(item.getItemId() == R.id.btn_menu_cerrarSesion){
 
             prefs.edit().clear().apply();
-            actualizarMenuDrawer();
-            navegarDesdeDrawer(new HomeFragment());
+
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
             Toast.makeText(getApplicationContext(), "Sesión cerrada",Toast.LENGTH_LONG).show();
         }
+        item.setChecked(true);
         return true;
     }
 

@@ -75,6 +75,8 @@ public class RegistroActivity extends AppCompatActivity {
                                         .putBoolean("login", true)
                                         .putString("nombre", etNombre.getText().toString())
                                         .putString("email",  etEmail.getText().toString())
+                                        .putString("descripcion", "")
+                                        .putString("password", etPassword.getText().toString())
                                         .apply();
                                 Intent i = new Intent(RegistroActivity.this, MainActivity.class);
                                 startActivity(i);

@@ -47,3 +47,7 @@ Pude agregar la capacidad de crear post, evitar que se cree un usuario con un no
 ## 28 de Febrero
 
 Añadida la funcion de borrar post mientras sea del usuario con el que se iniciara sesion
+
+## 1 de Marzo
+
+Pude añadir la funcion de editar perfil correctamente junto con arreglar un problema importante en el cual el drawerLayout dejaba de funcionar y quedaba en blanco

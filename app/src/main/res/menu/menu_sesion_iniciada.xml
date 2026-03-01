@@ -6,7 +6,7 @@
     >
 
 
-    <group
+    <group android:id="@+id/group_principal"
         android:checkableBehavior="single">
         <item
             android:id="@+id/btn_menu_inicio"

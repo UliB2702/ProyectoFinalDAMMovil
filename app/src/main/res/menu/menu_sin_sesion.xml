@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/group_principal"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/btn_iniciarSesion"
             android:icon="@drawable/login_icon"

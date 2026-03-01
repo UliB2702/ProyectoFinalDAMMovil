@@ -22,36 +22,31 @@
         android:id="@+id/txtUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:text="Nombre"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/btnSeguir"
-        app:layout_constraintHorizontal_bias="0.744"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fotoPerfil" />
-
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteX="71dp"
-        tools:layout_editor_absoluteY="353dp" />
 
     <Button
         android:id="@+id/btnSeguir"
         android:layout_width="96dp"
         android:layout_height="37dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="13dp"
         android:backgroundTint="#005CB8"
         android:text="Seguir"
         android:textSize="10sp"
+        android:visibility="gone"
         app:icon="@android:drawable/ic_input_add"
         app:iconPadding="0dp"
         app:layout_constraintBottom_toTopOf="@+id/txtDescripcion"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/txtUsuario"
         app:layout_constraintTop_toBottomOf="@+id/fotoPerfil"
         app:layout_constraintVertical_bias="0.0" />
 
