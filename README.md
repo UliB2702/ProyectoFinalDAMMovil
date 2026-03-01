@@ -50,4 +50,4 @@ Añadida la funcion de borrar post mientras sea del usuario con el que se inicia
 
 ## 1 de Marzo
 
-Pude añadir la funcion de editar perfil correctamente junto con arreglar un problema importante en el cual el drawerLayout dejaba de funcionar y quedaba en blanco
+Pude añadir la funcion de editar perfil correctamente junto con arreglar un problema importante en el cual el drawerLayout dejaba de funcionar y quedaba en blanco.
