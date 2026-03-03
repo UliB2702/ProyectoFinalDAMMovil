@@ -70,6 +70,7 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
         } else {
             holder.btnBorrar.setVisibility(View.GONE);
         }
+        holder.imgAdjunto.setVisibility(View.GONE);
     }
 
     @Override

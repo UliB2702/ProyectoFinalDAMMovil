@@ -17,9 +17,8 @@
         android:id="@+id/nav_header_imageView"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@mipmap/ic_launcher"
-        app:shapeAppearanceOverlay="@style/imagenRedondeada"
-        />
+        android:src="@drawable/fotoperfil"
+        app:shapeAppearanceOverlay="@style/imagenRedondeada" />
 
     <TextView
         android:id="@+id/nav_header_tvnombre"
