@@ -69,22 +69,27 @@ public class RegistroActivity extends AppCompatActivity {
                     if (etPassword.getText().toString().equals(etConfirmPassword.getText().toString())){
 
                         api.crearUsuario(etNombre.getText().toString(), etPassword.getText().toString(), etEmail.getText().toString(),success-> {
-                            if(success){
-                                getSharedPreferences("sesion", MODE_PRIVATE)
-                                        .edit()
-                                        .putBoolean("login", true)
-                                        .putString("nombre", etNombre.getText().toString())
-                                        .putString("email",  etEmail.getText().toString())
-                                        .putString("descripcion", "")
-                                        .putString("password", etPassword.getText().toString())
-                                        .apply();
-                                Intent i = new Intent(RegistroActivity.this, MainActivity.class);
-                                startActivity(i);
-                                finish();
+                            runOnUiThread(() -> {
+                                if(success){
+                                    getSharedPreferences("sesion", MODE_PRIVATE)
+                                            .edit()
+                                            .putBoolean("login", true)
+                                            .putString("nombre", etNombre.getText().toString())
+                                            .putString("email",  etEmail.getText().toString())
+                                            .putString("descripcion", "")
+                                            .putString("password", etPassword.getText().toString())
+                                            .apply();
+                                    Intent i = new Intent(RegistroActivity.this, MainActivity.class);
+                                    startActivity(i);
+                                    finish();
 
-                            }
+                                }
+                                else{
+                                    tvError.setText("Algunos datos no son correctos");
+                                }
+                            });
                         });
-                        tvError.setText("Algunos datos no son correctos");
+
                     }
                     else{
                         tvError.setText("La contraseña debe ser igual en ambos campos");

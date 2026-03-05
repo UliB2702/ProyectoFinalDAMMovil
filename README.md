@@ -51,3 +51,11 @@ Añadida la funcion de borrar post mientras sea del usuario con el que se inicia
 ## 1 de Marzo
 
 Pude añadir la funcion de editar perfil correctamente junto con arreglar un problema importante en el cual el drawerLayout dejaba de funcionar y quedaba en blanco.
+
+## 3 de Marzo
+
+Facilite el uso de los posts diseñando un solo diseño que oculte la imagen si no hay archivo adjunto y arregle problemas que habia con el iniciar sesion
+
+## 5 de Marzo
+
+Arregle problemas que habia tanto con el mensaje como con la creacion de usuario en sí

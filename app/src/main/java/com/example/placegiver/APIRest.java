@@ -92,7 +92,7 @@ public class APIRest {
                 }
                 System.out.println("jj");
                 int code = con.getResponseCode();
-                if(code == 201){
+                if(code == 200){
                     callback.onRegistroResult(true);
                 } else if(code == 409){
                     callback.onRegistroResult(false);
