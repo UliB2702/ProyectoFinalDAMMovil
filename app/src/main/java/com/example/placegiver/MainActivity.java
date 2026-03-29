@@ -24,6 +24,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
+/**
+ * Main activity of the app where you can move between fragments
+ * */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
@@ -72,6 +75,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
+
+    /**
+     * Verifies the navigation between fragments, allowing the preservation of the previous fragment and cancelling the navigation
+     * if it is the same fragment and has the same arguments to avoid unnecessary recharges
+     * @param fragment Fragment to which wants to navigate to
+     * @param agregarBackStack Indicates if the fragment has to be added to the backstack
+     * */
     public void navegarA(Fragment fragment, boolean agregarBackStack) {
         drawer.closeDrawer(GravityCompat.START);
 
@@ -100,9 +110,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             ft.commit();
     }
+
+    /**
+     * Make the navegation to another fragment sent by param
+     * @param fragment
+     * */
     private void navegarDesdeDrawer(Fragment fragment) {
         navegarA(fragment, false);
     }
+
+    /**
+     * Update the activities menu depending if there is a user logged in or not
+     * */
     private void actualizarMenuDrawer() {
         if (navigationView == null) return;
 
@@ -135,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
     }
 
+    /**
+     * Defines the events for the different options for the menu on the toolbar
+     * */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.btn_iniciarSesion){
@@ -170,18 +192,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Synchronizes the state of the DrawerToggle with the current state of the DrawerLayout.
+     * */
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         toogle.syncState();
     }
 
+    /**
+     * Notify the DrawerToggle if there is any change on screen's device so the DrawerToggle can
+     * change it's state properly
+     * */
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         toogle.onConfigurationChanged(newConfig);
     }
 
+    /**
+     * Controls the option selection of the DrawerToggle menu
+     * */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(toogle.onOptionsItemSelected(item)){

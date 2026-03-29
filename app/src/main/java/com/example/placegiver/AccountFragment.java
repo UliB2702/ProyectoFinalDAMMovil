@@ -24,7 +24,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
+/**
+ * Fragment where you can see someone's profile
+ * */
 public class AccountFragment extends Fragment {
     RecyclerView rv;
     RecyclerView.LayoutManager miLayoutManager;
@@ -124,12 +126,18 @@ public class AccountFragment extends Fragment {
 
     }
 
+    /**
+     * Defines the menu that uses the toolbar of the fragment
+     * */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu2, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    /**
+     * Defines the events for the different options for the menu on the toolbar
+     * */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -139,6 +147,10 @@ public class AccountFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Loads all the posts for the recycle view based on a user's name
+     * @param usuario Username from which wants to search for posts
+     * */
     private void cargarPosts(String usuario) {
         String usuarioActual = prefs.getString("nombre", "");
         api.obtenerPostsDeUsuario(usuario, (success, posts) -> {

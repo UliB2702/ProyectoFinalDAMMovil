@@ -21,6 +21,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+
+/**
+ * Activity where a user can log in to the app
+ * */
 public class IniciarSesionActivity extends AppCompatActivity {
 
     Toolbar tb;
@@ -98,13 +102,19 @@ public class IniciarSesionActivity extends AppCompatActivity {
         });
 
     }
-
+    /**
+     * Defines the menu that uses the toolbar of the activity
+     * */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu2, menu);
         return true;
     }
+
+    /**
+     * Defines the events for the different options for the menu on the toolbar
+     * */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();

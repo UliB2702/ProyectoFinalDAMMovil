@@ -16,7 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
+/**
+ * Main fragment of the app where appears the most recent posts
+ * */
 public class HomeFragment extends Fragment {
 
     RecyclerView rv;
@@ -31,6 +33,9 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
+    /**
+     * Reloads the posts of the recycle view using an api call
+     * */
     public void recargarPosts() {
         String usuarioActual = prefs.getString("nombre", "");
         api.obtenerPostsMasRecientes((success, posts) -> {

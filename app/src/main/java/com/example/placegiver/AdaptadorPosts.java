@@ -29,7 +29,13 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
     private OnUsuarioClickListener listener;
     private OnPostDeleteListener deleteListener;
 
-
+    /**
+     * Sets the data for the posts' adapter
+     * @param posts Posts that needs to appear in the RecycleView
+     * @param usuarioSesion Current name of the user logged in
+     * @param listener Event for when the username or profile picture is clicked
+     * @param deleteListener Event for when the delete post button is clicked
+     * */
     public AdaptadorPosts(ArrayList<Post> posts, String usuarioSesion,
                           OnUsuarioClickListener listener,
                           OnPostDeleteListener deleteListener){
@@ -39,12 +45,26 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
         this.deleteListener = deleteListener;
 
     }
+
+    /**
+     * Sets the posts for the adapter
+     * @param  posts List of posts for the adapter
+     * */
     public void setPosts(ArrayList<Post> posts) {
         this.posts = posts;
     }
+
+    /**
+     * Returns the post that was clicked from the adapter
+     * @return The id of the post that was selected
+     * */
     public int getSelectedPos(){
         return selectedPos;
     }
+
+    /**
+     * Deletes a posts from the adapter
+     * */
     public void eliminarPost(int position){
         posts.remove(position);
         notifyItemRemoved(position);
@@ -78,6 +98,10 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
         return posts.size();
     }
 
+    /**
+     * Creates a container for each posts of the adapter
+     *
+     * */
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtNombreUsuario;
@@ -149,15 +173,33 @@ public class AdaptadorPosts extends RecyclerView.Adapter<AdaptadorPosts.MyViewHo
 
         }
 
+        /**
+         * Return the TextView with the user's name who created to post
+         * @return TextView of the user's name
+         * */
         public TextView obtenerNombreUsuario(){
             return txtNombreUsuario;
         }
+
+        /**
+         * Return the TextView with the post's text
+         *  @return TextView of the post's text
+         * */
         public TextView obtenerTexto(){
             return txtTexto;
         }
 
+        /**
+         * Return the Id of the Element
+         * @return Id of the Element
+         * */
         public int obtenerId(){return id;}
 
+
+        /**
+         * Return the TextView with the post's text
+         * @param id Sets a new Id for the Element
+         * */
         public void ponerId(int id){
             this.id = id;
         }

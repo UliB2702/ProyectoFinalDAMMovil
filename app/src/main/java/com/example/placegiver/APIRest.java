@@ -37,6 +37,15 @@ public class APIRest {
         void onDeleteResult(boolean success);
     }
     //API de Usuarios
+
+    /**
+     * Calls the api to update a User's date with the params that were sent
+     * @param nombre Name of the user
+     * @param  password Password of the user
+     * @param email Email of the user
+     * @param descripcion Description of the user
+     * @param callback Interface for to update the user
+     * */
     public void updateUsuario(String nombre, String password, String email, String descripcion, UpdateUsuarioCallback callback){
         new Thread(() -> {
             try {
@@ -72,6 +81,13 @@ public class APIRest {
             }
         }).start();
     }
+    /**
+     * Calls the api to create an user with the params that were sent as the data
+     * @param nombre Name of the user
+     * @param  password Password of the user
+     * @param email Email of the user
+     * @param callback Interface for to create the user
+     * */
     public void crearUsuario(String nombre, String password, String email, RegistroCallback callback){
         new Thread(() -> {
             try{
@@ -106,6 +122,12 @@ public class APIRest {
             }
         }).start();
     }
+
+    /**
+     * Calls the api to search for an user's data based on it's name
+     * @param nombre Name of the user
+     * @param callback Interface for searching an user
+     * */
     public void obtenerDatosUsuario(String nombre, LoginCallback callback) {
         new Thread(() ->  {
         try {
@@ -152,6 +174,13 @@ public class APIRest {
 
     }
 
+
+    /**
+     * Calls the api to search for an user's data based on it's name and password
+     * @param nombre Name of the user
+     * @param  pass Password of the user
+     * @param callback Interface for searching an user
+     * */
     public void obtenerDatosUsuario(String nombre, String pass, LoginCallback callback) {
         new Thread(() -> {try {
             URL url = new URL(
@@ -205,6 +234,10 @@ public class APIRest {
 
     // API de Publicaciones
 
+    /**
+     * Calls the api to optain the most recent posts
+     * @param callback Interface for searching a lists of posts
+     * */
     public void obtenerPostsMasRecientes(PostsCallback callback){
         ArrayList<Post> posts = new ArrayList<>();
         new Thread(()-> {
@@ -257,6 +290,12 @@ public class APIRest {
         }).start();
 
     }
+    /**
+     * Calls the api to create a post with the data sent as params
+     * @param texto Text of the post
+     * @param usuario User who created the post
+     * @param callback Interface for a post creation
+     * */
     public void crearPost(String texto, String usuario, RegistroCallback callback){
         new Thread(() -> {
             try{
@@ -284,6 +323,11 @@ public class APIRest {
         }).start();
     }
 
+    /**
+     * Calls the api to delete a certain post
+     * @param id Id of the post that wants to be deleted
+     * @param callback Interface to delete a post
+     * */
     public void borrarPost(int id, DeleteCallback callback){
         new Thread(() ->{
             try{
@@ -306,6 +350,11 @@ public class APIRest {
         }).start();
     }
 
+    /**
+     * Calls the api to get all the posts from a user
+     * @param nombre Name of the user who created the posts
+     * @param callback Interface to search for a list of posts
+     * */
     public void obtenerPostsDeUsuario(String nombre, PostsCallback callback){
         ArrayList<Post> posts = new ArrayList<>();
         new Thread(()-> {

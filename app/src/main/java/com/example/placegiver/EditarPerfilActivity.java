@@ -22,6 +22,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * Activity where you can edit current logged user
+ * */
 public class EditarPerfilActivity extends AppCompatActivity {
 
     Button btnEnviar;
@@ -103,6 +106,9 @@ public class EditarPerfilActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Defines the events for the different options for the menu on the toolbar
+     * */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id=item.getItemId();

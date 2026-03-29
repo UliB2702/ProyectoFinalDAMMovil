@@ -59,3 +59,7 @@ Facilite el uso de los posts diseñando un solo diseño que oculte la imagen si 
 ## 5 de Marzo
 
 Arregle problemas que habia tanto con el mensaje como con la creacion de usuario en sí
+
+## 29 de Marzo
+
+Añadida la documentación en Ingles de las funciones del proyecto
